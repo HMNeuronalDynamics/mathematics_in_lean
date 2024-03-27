@@ -21,6 +21,7 @@ example (a b c : ℝ) : a * b * c = b * c * a := by
   rw [mul_assoc]
   rw [mul_comm]
 
+
 /- Try doing the first of these without providing any arguments at all,
    and the second with only one argument. -/
 example (a b c : ℝ) : a * (b * c) = b * (c * a) := by
