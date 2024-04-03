@@ -21,14 +21,13 @@ example (a b c : ℝ) : a * b * c = b * c * a := by
   rw [mul_assoc]
   rw [mul_comm]
 
-
 /- Try doing the first of these without providing any arguments at all,
    and the second with only one argument. -/
 example (a b c : ℝ) : a * (b * c) = b * (c * a) := by
-  sorry
+  ring
 
 example (a b c : ℝ) : a * (b * c) = b * (a * c) := by
-  sorry
+  ring
 
 -- Using facts from the local context.
 example (a b c d e f : ℝ) (h : a * b = c * d) (h' : e = f) : a * (b * e) = c * (d * f) := by
