@@ -13,90 +13,131 @@ variable (u v : Set β)
 open Function
 open Set
 
-example : f ⁻¹' (u ∩ v) = f ⁻¹' u ∩ f ⁻¹' v := by
-  ext
-  rfl
-
-example : f '' (s ∪ t) = f '' s ∪ f '' t := by
-  ext y; constructor
-  · rintro ⟨x, xs | xt, rfl⟩
-    · left
-      use x, xs
-    right
-    use x, xt
-  rintro (⟨x, xs, rfl⟩ | ⟨x, xt, rfl⟩)
-  · use x, Or.inl xs
-  use x, Or.inr xt
-
-example : s ⊆ f ⁻¹' (f '' s) := by
-  intro x xs
-  show f x ∈ f '' s
-  use x, xs
-
 example : f '' s ⊆ v ↔ s ⊆ f ⁻¹' v := by
-  sorry
+  constructor
+  · intro h x xs
+    have : f x ∈ f '' s := mem_image_of_mem _ xs
+    exact h this
+  intro h y ymem
+  rcases ymem with ⟨x, xs, fxeq⟩
+  rw [← fxeq]
+  apply h xs
 
 example (h : Injective f) : f ⁻¹' (f '' s) ⊆ s := by
-  sorry
+  rintro x ⟨y, ys, fxeq⟩
+  rw [← h fxeq]
+  exact ys
 
 example : f '' (f ⁻¹' u) ⊆ u := by
-  sorry
+  rintro y ⟨x, xmem, rfl⟩
+  exact xmem
 
 example (h : Surjective f) : u ⊆ f '' (f ⁻¹' u) := by
-  sorry
+  intro y yu
+  rcases h y with ⟨x, fxeq⟩
+  use x
+  constructor
+  · show f x ∈ u
+    rw [fxeq]
+    exact yu
+  exact fxeq
 
 example (h : s ⊆ t) : f '' s ⊆ f '' t := by
-  sorry
+  rintro y ⟨x, xs, fxeq⟩
+  use x, h xs
 
 example (h : u ⊆ v) : f ⁻¹' u ⊆ f ⁻¹' v := by
-  sorry
+  intro x; apply h
 
 example : f ⁻¹' (u ∪ v) = f ⁻¹' u ∪ f ⁻¹' v := by
-  sorry
+  ext x; rfl
 
 example : f '' (s ∩ t) ⊆ f '' s ∩ f '' t := by
-  sorry
+  rintro y ⟨x, ⟨xs, xt⟩, rfl⟩
+  constructor
+  . use x, xs
+  . use x, xt
 
 example (h : Injective f) : f '' s ∩ f '' t ⊆ f '' (s ∩ t) := by
-  sorry
+  rintro y ⟨⟨x₁, x₁s, rfl⟩, ⟨x₂, x₂t, fx₂eq⟩⟩
+  use x₁
+  constructor
+  . use x₁s
+    rw [← h fx₂eq]
+    exact x₂t
+  . rfl
 
 example : f '' s \ f '' t ⊆ f '' (s \ t) := by
-  sorry
+  rintro y ⟨⟨x₁, x₁s, rfl⟩, h⟩
+  use x₁
+  constructor
+  . constructor
+    . exact x₁s
+    . intro h'
+      apply h
+      use x₁, h'
+  . rfl
 
-example : f ⁻¹' u \ f ⁻¹' v ⊆ f ⁻¹' (u \ v) := by
-  sorry
+example : f ⁻¹' u \ f ⁻¹' v ⊆ f ⁻¹' (u \ v) :=
+  fun x ↦ id
 
 example : f '' s ∩ v = f '' (s ∩ f ⁻¹' v) := by
-  sorry
+  ext y; constructor
+  · rintro ⟨⟨x, xs, rfl⟩, fxv⟩
+    use x, ⟨xs, fxv⟩
+  rintro ⟨x, ⟨⟨xs, fxv⟩, rfl⟩⟩
+  exact ⟨⟨x, xs, rfl⟩, fxv⟩
 
 example : f '' (s ∩ f ⁻¹' u) ⊆ f '' s ∩ u := by
-  sorry
+  rintro y ⟨x, ⟨xs, fxu⟩, rfl⟩
+  exact ⟨⟨x, xs, rfl⟩, fxu⟩
 
 example : s ∩ f ⁻¹' u ⊆ f ⁻¹' (f '' s ∩ u) := by
-  sorry
+  rintro x ⟨xs, fxu⟩
+  exact ⟨⟨x, xs, rfl⟩, fxu⟩
 
 example : s ∪ f ⁻¹' u ⊆ f ⁻¹' (f '' s ∪ u) := by
-  sorry
+  rintro x (xs | fxu)
+  · left
+    exact ⟨x, xs, rfl⟩
+  right; exact fxu
 
 variable {I : Type*} (A : I → Set α) (B : I → Set β)
 
 example : (f '' ⋃ i, A i) = ⋃ i, f '' A i := by
-  sorry
+  ext y; simp
+  constructor
+  · rintro ⟨x, ⟨i, xAi⟩, fxeq⟩
+    use i, x
+  rintro ⟨i, x, xAi, fxeq⟩
+  exact ⟨x, ⟨i, xAi⟩, fxeq⟩
 
 example : (f '' ⋂ i, A i) ⊆ ⋂ i, f '' A i := by
-  sorry
+  intro y; simp
+  intro x h fxeq i
+  use x
+  exact ⟨h i, fxeq⟩
 
 example (i : I) (injf : Injective f) : (⋂ i, f '' A i) ⊆ f '' ⋂ i, A i := by
-  sorry
+  intro y; simp
+  intro h
+  rcases h i with ⟨x, xAi, fxeq⟩
+  use x; constructor
+  · intro i'
+    rcases h i' with ⟨x', x'Ai, fx'eq⟩
+    have : f x = f x' := by rw [fxeq, fx'eq]
+    have : x = x' := injf this
+    rw [this]
+    exact x'Ai
+  exact fxeq
 
 example : (f ⁻¹' ⋃ i, B i) = ⋃ i, f ⁻¹' B i := by
-  sorry
+  ext x
+  simp
 
 example : (f ⁻¹' ⋂ i, B i) = ⋂ i, f ⁻¹' B i := by
-  sorry
-
-example : InjOn f s ↔ ∀ x₁ ∈ s, ∀ x₂ ∈ s, f x₁ = f x₂ → x₁ = x₂ :=
-  Iff.refl _
+  ext x
+  simp
 
 end
 
@@ -104,49 +145,51 @@ section
 
 open Set Real
 
-example : InjOn log { x | x > 0 } := by
-  intro x xpos y ypos
-  intro e
-  -- log x = log y
-  calc
-    x = exp (log x) := by rw [exp_log xpos]
-    _ = exp (log y) := by rw [e]
-    _ = y := by rw [exp_log ypos]
-
-
-example : range exp = { y | y > 0 } := by
-  ext y; constructor
-  · rintro ⟨x, rfl⟩
-    apply exp_pos
-  intro ypos
-  use log y
-  rw [exp_log ypos]
-
 example : InjOn sqrt { x | x ≥ 0 } := by
-  sorry
+  intro x xnonneg y ynonneg
+  intro e
+  calc
+    x = sqrt x ^ 2 := by rw [sq_sqrt xnonneg]
+    _ = sqrt y ^ 2 := by rw [e]
+    _ = y := by rw [sq_sqrt ynonneg]
+
 
 example : InjOn (fun x ↦ x ^ 2) { x : ℝ | x ≥ 0 } := by
-  sorry
+  intro x xnonneg y ynonneg
+  intro e
+  dsimp at *
+  calc
+    x = sqrt (x ^ 2) := by rw [sqrt_sq xnonneg]
+    _ = sqrt (y ^ 2) := by rw [e]
+    _ = y := by rw [sqrt_sq ynonneg]
+
 
 example : sqrt '' { x | x ≥ 0 } = { y | y ≥ 0 } := by
-  sorry
+  ext y; constructor
+  · rintro ⟨x, ⟨xnonneg, rfl⟩⟩
+    apply sqrt_nonneg
+  intro ynonneg
+  use y ^ 2
+  dsimp at *
+  constructor
+  apply pow_nonneg ynonneg
+  apply sqrt_sq
+  assumption
 
 example : (range fun x ↦ x ^ 2) = { y : ℝ | y ≥ 0 } := by
-  sorry
+  ext y
+  constructor
+  · rintro ⟨x, rfl⟩
+    dsimp at *
+    apply pow_two_nonneg
+  intro ynonneg
+  use sqrt y
+  exact sq_sqrt ynonneg
 
 end
 
 section
 variable {α β : Type*} [Inhabited α]
-
-#check (default : α)
-
-variable (P : α → Prop) (h : ∃ x, P x)
-
-#check Classical.choose h
-
-example : P (Classical.choose h) :=
-  Classical.choose_spec h
 
 noncomputable section
 
@@ -163,11 +206,29 @@ variable (f : α → β)
 
 open Function
 
+example : Injective f ↔ LeftInverse (inverse f) f := by
+  constructor
+  · intro h y
+    apply h
+    apply inverse_spec
+    use y
+  intro h x1 x2 e
+  rw [← h x1, ← h x2, e]
+
 example : Injective f ↔ LeftInverse (inverse f) f :=
-  sorry
+  ⟨fun h y ↦ h (inverse_spec _ ⟨y, rfl⟩), fun h x1 x2 e ↦ by rw [← h x1, ← h x2, e]⟩
+
+example : Surjective f ↔ RightInverse (inverse f) f := by
+  constructor
+  · intro h y
+    apply inverse_spec
+    apply h
+  intro h y
+  use inverse f y
+  apply h
 
 example : Surjective f ↔ RightInverse (inverse f) f :=
-  sorry
+  ⟨fun h y ↦ inverse_spec _ (h _), fun h y ↦ ⟨inverse f y, h _⟩⟩
 
 end
 
@@ -183,11 +244,8 @@ theorem Cantor : ∀ f : α → Set α, ¬Surjective f := by
     intro h'
     have : j ∉ f j := by rwa [h] at h'
     contradiction
-  have h₂ : j ∈ S
-  sorry
-  have h₃ : j ∉ S
-  sorry
+  have h₂ : j ∈ S := h₁
+  have h₃ : j ∉ S := by rwa [h] at h₁
   contradiction
 
--- COMMENTS: TODO: improve this
 end
