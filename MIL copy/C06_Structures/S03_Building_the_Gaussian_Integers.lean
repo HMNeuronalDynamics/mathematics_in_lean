@@ -1,4 +1,3 @@
-import Mathlib.Data.Int.Basic
 import Mathlib.Algebra.EuclideanDomain.Basic
 import Mathlib.RingTheory.PrincipalIdealDomain
 import MIL.Common
@@ -87,6 +86,8 @@ instance instCommRing : CommRing gaussInt where
   add := (· + ·)
   neg x := -x
   mul := (· * ·)
+  nsmul := nsmulRec
+  zsmul := zsmulRec
   add_assoc := by
     intros
     ext <;> simp <;> ring
@@ -120,8 +121,12 @@ instance instCommRing : CommRing gaussInt where
   mul_comm := by
     intros
     ext <;> simp <;> ring
-  zero_mul := sorry
-  mul_zero := sorry
+  zero_mul := by
+    intros
+    ext <;> simp
+  mul_zero := by
+    intros
+    ext <;> simp
 
 @[simp]
 theorem sub_re (x y : gaussInt) : (x - y).re = x.re - y.re :=
@@ -137,6 +142,15 @@ instance : Nontrivial gaussInt := by
   simp
 
 end gaussInt
+
+example (a b : ℤ) : a = b * (a / b) + a % b :=
+  Eq.symm (Int.ediv_add_emod a b)
+
+example (a b : ℤ) : b ≠ 0 → 0 ≤ a % b :=
+  Int.emod_nonneg a
+
+example (a b : ℤ) : b ≠ 0 → a % b < |b| :=
+  Int.emod_lt a
 
 namespace Int
 
@@ -164,23 +178,23 @@ theorem mod'_eq (a b : ℤ) : mod' a b = a - b * div' a b := by linarith [div'_a
 
 end Int
 
-private theorem aux {α : Type*} [LinearOrderedRing α] {x y : α} (h : x ^ 2 + y ^ 2 = 0) : x = 0 :=
-  haveI h' : x ^ 2 = 0 := by
-    apply le_antisymm _ (sq_nonneg x)
-    rw [← h]
-    apply le_add_of_nonneg_right (sq_nonneg y)
-  pow_eq_zero h'
-
 theorem sq_add_sq_eq_zero {α : Type*} [LinearOrderedRing α] (x y : α) :
     x ^ 2 + y ^ 2 = 0 ↔ x = 0 ∧ y = 0 := by
   constructor
   · intro h
-    constructor
-    · exact aux h
-    rw [add_comm] at h
-    exact aux h
-  rintro ⟨rfl, rfl⟩
-  norm_num
+    have hx : x = 0 := by
+      apply eq_of_le_of_abs_le
+      · exact pow_two_nonneg _
+      · rw [← abs_pow, h]
+        apply zero_le
+    have hy : y = 0 := by
+      apply eq_of_le_of_abs_le
+      · exact pow_two_nonneg _
+      · rw [← abs_pow, h, hx]
+        apply zero_le
+    exact ⟨hx, hy⟩
+  · rintro ⟨rfl, rfl⟩
+    simp
 
 namespace gaussInt
 
@@ -189,19 +203,17 @@ def norm (x : gaussInt) :=
 
 @[simp]
 theorem norm_nonneg (x : gaussInt) : 0 ≤ norm x := by
-  apply add_nonneg <;>
-  apply sq_nonneg
+  apply add_nonneg <;> apply pow_two_nonneg
 
 theorem norm_eq_zero (x : gaussInt) : norm x = 0 ↔ x = 0 := by
-  rw [norm, sq_add_sq_eq_zero, gaussInt.ext_iff]
-  rfl
+  rw [← sq_add_sq_eq_zero]
+  simp [norm, ext_iff]
 
 theorem norm_pos (x : gaussInt) : 0 < norm x ↔ x ≠ 0 := by
-  rw [lt_iff_le_and_ne, ne_comm, Ne, norm_eq_zero]
-  simp [norm_nonneg]
+  rw [lt_iff_le_and_ne, norm_nonneg, norm_eq_zero, not_and, ne_comm]
 
 theorem norm_mul (x y : gaussInt) : norm (x * y) = norm x * norm y := by
-  simp [norm]
+  simp [norm, mul_def]
   ring
 
 def conj (x : gaussInt) : gaussInt :=
@@ -272,7 +284,7 @@ instance : EuclideanDomain gaussInt :=
     quotient := (· / ·)
     remainder := (· % ·)
     quotient_mul_add_remainder_eq :=
-      fun x y ↦ by simp only; rw [mod_def, add_comm, sub_add_cancel]
+      fun x y ↦ by simp only; rw [mod_def, add_comm] ; ring
     quotient_zero := fun x ↦ by
       simp [div_def, norm, Int.div']
       rfl

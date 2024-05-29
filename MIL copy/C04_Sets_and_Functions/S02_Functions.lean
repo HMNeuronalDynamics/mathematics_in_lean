@@ -13,131 +13,156 @@ variable (u v : Set β)
 open Function
 open Set
 
+example : f ⁻¹' (u ∩ v) = f ⁻¹' u ∩ f ⁻¹' v := by
+  ext
+  rfl
+
+example : f '' (s ∪ t) = f '' s ∪ f '' t := by
+  ext y; constructor
+  · rintro ⟨x, xs | xt, rfl⟩
+    · left
+      use x, xs
+    right
+    use x, xt
+  rintro (⟨x, xs, rfl⟩ | ⟨x, xt, rfl⟩)
+  · use x, Or.inl xs
+  use x, Or.inr xt
+
+example : s ⊆ f ⁻¹' (f '' s) := by
+  intro x xs
+  show f x ∈ f '' s
+  use x, xs
+
 example : f '' s ⊆ v ↔ s ⊆ f ⁻¹' v := by
-  constructor
+  split
   · intro h x xs
-    have : f x ∈ f '' s := mem_image_of_mem _ xs
-    exact h this
-  intro h y ymem
-  rcases ymem with ⟨x, xs, fxeq⟩
-  rw [← fxeq]
-  apply h xs
+    exact h ⟨x, xs, rfl⟩
+  · rintro h y ⟨x, xs, rfl⟩
+    exact h xs
 
 example (h : Injective f) : f ⁻¹' (f '' s) ⊆ s := by
-  rintro x ⟨y, ys, fxeq⟩
-  rw [← h fxeq]
+  intro x hx
+  rcases hx with ⟨y, ys, rfl⟩
   exact ys
 
 example : f '' (f ⁻¹' u) ⊆ u := by
-  rintro y ⟨x, xmem, rfl⟩
-  exact xmem
+  intro y hy
+  rcases hy with ⟨x, hx, rfl⟩
+  exact hx
 
 example (h : Surjective f) : u ⊆ f '' (f ⁻¹' u) := by
-  intro y yu
-  rcases h y with ⟨x, fxeq⟩
+  intro y hy
+  rcases h y with ⟨x, rfl⟩
   use x
-  constructor
-  · show f x ∈ u
-    rw [fxeq]
-    exact yu
-  exact fxeq
+  exact ⟨hy, rfl⟩
 
 example (h : s ⊆ t) : f '' s ⊆ f '' t := by
-  rintro y ⟨x, xs, fxeq⟩
-  use x, h xs
+  intro y hy
+  rcases hy with ⟨x, xs, rfl⟩
+  use x
+  exact ⟨h xs, rfl⟩
 
 example (h : u ⊆ v) : f ⁻¹' u ⊆ f ⁻¹' v := by
-  intro x; apply h
+  intro x hx
+  exact h hx
 
 example : f ⁻¹' (u ∪ v) = f ⁻¹' u ∪ f ⁻¹' v := by
-  ext x; rfl
+  ext x
+  simp only [mem_preimage, mem_union_eq]
+  rfl
 
 example : f '' (s ∩ t) ⊆ f '' s ∩ f '' t := by
-  rintro y ⟨x, ⟨xs, xt⟩, rfl⟩
-  constructor
-  . use x, xs
-  . use x, xt
+  intro y hy
+  rcases hy with ⟨x, ⟨xs, xt⟩, rfl⟩
+  exact ⟨⟨x, xs, rfl⟩, ⟨x, xt, rfl⟩⟩
 
 example (h : Injective f) : f '' s ∩ f '' t ⊆ f '' (s ∩ t) := by
-  rintro y ⟨⟨x₁, x₁s, rfl⟩, ⟨x₂, x₂t, fx₂eq⟩⟩
-  use x₁
-  constructor
-  . use x₁s
-    rw [← h fx₂eq]
-    exact x₂t
-  . rfl
+  rintro y ⟨⟨x, xs, rfl⟩, ⟨x', xt, heq⟩⟩
+  have : x = x' := h heq
+  subst this
+  use x, ⟨xs, xt⟩
+  rfl
 
 example : f '' s \ f '' t ⊆ f '' (s \ t) := by
-  rintro y ⟨⟨x₁, x₁s, rfl⟩, h⟩
-  use x₁
+  rintro y ⟨⟨x, xs, rfl⟩, ynt⟩
+  use x
   constructor
-  . constructor
-    . exact x₁s
-    . intro h'
-      apply h
-      use x₁, h'
-  . rfl
+  · exact ⟨xs, fun hxt => ynt ⟨x, hxt, rfl⟩⟩
+  rfl
 
-example : f ⁻¹' u \ f ⁻¹' v ⊆ f ⁻¹' (u \ v) :=
-  fun x ↦ id
+example : f ⁻¹' u \ f ⁻¹' v ⊆ f ⁻¹' (u \ v) := by
+  rintro x ⟨hx, hnx⟩
+  constructor
+  · exact hx
+  · intro hxv
+    exact hnx hxv
 
 example : f '' s ∩ v = f '' (s ∩ f ⁻¹' v) := by
-  ext y; constructor
-  · rintro ⟨⟨x, xs, rfl⟩, fxv⟩
-    use x, ⟨xs, fxv⟩
-  rintro ⟨x, ⟨⟨xs, fxv⟩, rfl⟩⟩
-  exact ⟨⟨x, xs, rfl⟩, fxv⟩
+  ext y
+  simp only [mem_inter_iff, mem_image, mem_preimage]
+  constructor
+  · rintro ⟨⟨x, xs, rfl⟩, yv⟩
+    exact ⟨x, ⟨xs, yv⟩, rfl⟩
+  rintro ⟨x, ⟨xs, xv⟩, rfl⟩
+  exact ⟨⟨x, xs, rfl⟩, xv⟩
 
 example : f '' (s ∩ f ⁻¹' u) ⊆ f '' s ∩ u := by
-  rintro y ⟨x, ⟨xs, fxu⟩, rfl⟩
-  exact ⟨⟨x, xs, rfl⟩, fxu⟩
+  rintro y ⟨x, ⟨xs, xu⟩, rfl⟩
+  exact ⟨⟨x, xs, rfl⟩, xu⟩
 
 example : s ∩ f ⁻¹' u ⊆ f ⁻¹' (f '' s ∩ u) := by
-  rintro x ⟨xs, fxu⟩
-  exact ⟨⟨x, xs, rfl⟩, fxu⟩
+  intro x ⟨xs, xu⟩
+  exact ⟨⟨x, xs, rfl⟩, xu⟩
 
 example : s ∪ f ⁻¹' u ⊆ f ⁻¹' (f '' s ∪ u) := by
-  rintro x (xs | fxu)
+  intro x hx
+  cases hx
   · left
-    exact ⟨x, xs, rfl⟩
-  right; exact fxu
+    use x, hx
+  right
+  exact hx
 
 variable {I : Type*} (A : I → Set α) (B : I → Set β)
 
 example : (f '' ⋃ i, A i) = ⋃ i, f '' A i := by
-  ext y; simp
+  ext y
+  simp only [mem_image, mem_iUnion]
   constructor
-  · rintro ⟨x, ⟨i, xAi⟩, fxeq⟩
-    use i, x
-  rintro ⟨i, x, xAi, fxeq⟩
-  exact ⟨x, ⟨i, xAi⟩, fxeq⟩
+  · rintro ⟨x, ⟨i, xi⟩, rfl⟩
+    exact ⟨i, ⟨x, xi, rfl⟩⟩
+  rintro ⟨i, ⟨x, xi, rfl⟩⟩
+  exact ⟨x, ⟨i, xi⟩, rfl⟩
 
 example : (f '' ⋂ i, A i) ⊆ ⋂ i, f '' A i := by
-  intro y; simp
-  intro x h fxeq i
-  use x
-  exact ⟨h i, fxeq⟩
+  intro y hy
+  simp only [mem_image, mem_iInter] at *
+  rintro i
+  rcases hy with ⟨x, h, rfl⟩
+  exact ⟨x, h i, rfl⟩
 
 example (i : I) (injf : Injective f) : (⋂ i, f '' A i) ⊆ f '' ⋂ i, A i := by
-  intro y; simp
-  intro h
-  rcases h i with ⟨x, xAi, fxeq⟩
-  use x; constructor
-  · intro i'
-    rcases h i' with ⟨x', x'Ai, fx'eq⟩
-    have : f x = f x' := by rw [fxeq, fx'eq]
-    have : x = x' := injf this
-    rw [this]
-    exact x'Ai
-  exact fxeq
+  intro y hy
+  simp only [mem_image, mem_iInter] at *
+  rcases hy i with ⟨x, hxi, rfl⟩
+  use x
+  intro j
+  specialize hy j
+  rcases hy with ⟨x', hx'j, hx'eq⟩
+  have : x = x' := injf hx'eq
+  rwa [← this]
 
 example : (f ⁻¹' ⋃ i, B i) = ⋃ i, f ⁻¹' B i := by
   ext x
-  simp
+  simp only [mem_preimage, mem_iUnion]
+  rfl
 
 example : (f ⁻¹' ⋂ i, B i) = ⋂ i, f ⁻¹' B i := by
   ext x
-  simp
+  simp only [mem_preimage, mem_iInter]
+  rfl
+
+example : InjOn f s ↔ ∀ x₁ ∈ s, ∀ x₂ ∈ s, f x₁ = f x₂ → x₁ = x₂ :=
+  Iff.refl _
 
 end
 
@@ -145,51 +170,73 @@ section
 
 open Set Real
 
+example : InjOn log { x | x > 0 } := by
+  intro x xpos y ypos
+  intro e
+  -- log x = log y
+  calc
+    x = exp (log x) := by rw [exp_log xpos]
+    _ = exp (log y) := by rw [e]
+    _ = y := by rw [exp_log ypos]
+
+example : range exp = { y | y > 0 } := by
+  ext y; constructor
+  · rintro ⟨x, rfl⟩
+    apply exp_pos
+  intro ypos
+  use log y
+  rw [exp_log ypos]
+
 example : InjOn sqrt { x | x ≥ 0 } := by
   intro x xnonneg y ynonneg
   intro e
-  calc
-    x = sqrt x ^ 2 := by rw [sq_sqrt xnonneg]
-    _ = sqrt y ^ 2 := by rw [e]
-    _ = y := by rw [sq_sqrt ynonneg]
-
+  rw [sqrt_eq_iff_sq_eq xnonneg ynonneg] at e
+  exact e
 
 example : InjOn (fun x ↦ x ^ 2) { x : ℝ | x ≥ 0 } := by
   intro x xnonneg y ynonneg
   intro e
-  dsimp at *
-  calc
-    x = sqrt (x ^ 2) := by rw [sqrt_sq xnonneg]
-    _ = sqrt (y ^ 2) := by rw [e]
-    _ = y := by rw [sqrt_sq ynonneg]
-
+  rw [sq_eq_sq x y] at e
+  cases e
+  · assumption
+  · exfalso
+    linarith
 
 example : sqrt '' { x | x ≥ 0 } = { y | y ≥ 0 } := by
-  ext y; constructor
-  · rintro ⟨x, ⟨xnonneg, rfl⟩⟩
+  ext y
+  simp only [mem_image, mem_setOf_eq]
+  constructor
+  · rintro ⟨x, xnonneg, rfl⟩
     apply sqrt_nonneg
   intro ynonneg
   use y ^ 2
-  dsimp at *
   constructor
-  apply pow_nonneg ynonneg
-  apply sqrt_sq
-  assumption
+  · apply pow_two_nonneg
+  rw [sqrt_sqr ynonneg]
 
 example : (range fun x ↦ x ^ 2) = { y : ℝ | y ≥ 0 } := by
   ext y
+  simp only [mem_range, mem_setOf_eq]
   constructor
   · rintro ⟨x, rfl⟩
-    dsimp at *
     apply pow_two_nonneg
   intro ynonneg
   use sqrt y
-  exact sq_sqrt ynonneg
+  rw [sqrt_sqr ynonneg]
 
 end
 
 section
 variable {α β : Type*} [Inhabited α]
+
+#check (default : α)
+
+variable (P : α → Prop) (h : ∃ x, P x)
+
+#check Classical.choose h
+
+example : P (Classical.choose h) :=
+  Classical.choose_spec h
 
 noncomputable section
 
@@ -208,27 +255,28 @@ open Function
 
 example : Injective f ↔ LeftInverse (inverse f) f := by
   constructor
-  · intro h y
-    apply h
-    apply inverse_spec
-    use y
-  intro h x1 x2 e
-  rw [← h x1, ← h x2, e]
-
-example : Injective f ↔ LeftInverse (inverse f) f :=
-  ⟨fun h y ↦ h (inverse_spec _ ⟨y, rfl⟩), fun h x1 x2 e ↦ by rw [← h x1, ← h x2, e]⟩
+  · intro injf
+    intro x
+    rw [inverse, dif_pos]
+    · exact Classical.choose_spec ⟨x, rfl⟩
+    use x
+  intro linv
+  intros x y hxy
+  have : inverse f (f x) = inverse f (f y) := by rw [hxy]
+  rw [linv x, linv y] at this
+  exact this
 
 example : Surjective f ↔ RightInverse (inverse f) f := by
   constructor
-  · intro h y
-    apply inverse_spec
-    apply h
-  intro h y
+  · intro surjf
+    intro y
+    rw [inverse, dif_pos]
+    · exact Classical.choose_spec (surjf y)
+    exact surjf y
+  intro rinv
+  intro y
   use inverse f y
-  apply h
-
-example : Surjective f ↔ RightInverse (inverse f) f :=
-  ⟨fun h y ↦ inverse_spec _ (h _), fun h y ↦ ⟨inverse f y, h _⟩⟩
+  exact rinv y
 
 end
 
@@ -245,7 +293,8 @@ theorem Cantor : ∀ f : α → Set α, ¬Surjective f := by
     have : j ∉ f j := by rwa [h] at h'
     contradiction
   have h₂ : j ∈ S := h₁
-  have h₃ : j ∉ S := by rwa [h] at h₁
+  have h₃ : j ∉ S := by rwa [h]
   contradiction
 
+-- COMMENTS: TODO: improve this
 end
