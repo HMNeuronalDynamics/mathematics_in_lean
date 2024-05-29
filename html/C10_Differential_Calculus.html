@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
-
+  <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>10. Differential Calculus &mdash; Mathematics in Lean 0.1 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -13,11 +12,10 @@
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="_static/jquery.js?v=5d32c60e"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="_static/documentation_options.js?v=2709fde1"></script>
-        <script src="_static/doctools.js?v=888ff710"></script>
-        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
         <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
@@ -31,15 +29,11 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-
-          
-          
-          <a href="index.html" class="icon icon-home">
-            Mathematics in Lean
+            <a href="index.html" class="icon icon-home"> Mathematics in Lean
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -85,8 +79,8 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active"><span class="section-number">10. </span>Differential Calculus</li>
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li><span class="section-number">10. </span>Differential Calculus</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/C10_Differential_Calculus.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -96,8 +90,8 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="index-0">
-<span id="differential-calculus"></span><span id="id1"></span><h1><span class="section-number">10. </span>Differential Calculus<a class="headerlink" href="#index-0" title="Link to this heading">&#61633;</a></h1>
+  <span class="target" id="differential-calculus"></span><div class="section" id="index-0">
+<span id="id1"></span><h1><span class="section-number">10. </span>Differential Calculus<a class="headerlink" href="#index-0" title="Permalink to this headline">&#61633;</a></h1>
 <p>We now consider the formalization of notions from <em>analysis</em>,
 starting with differentiation in this chapter
 and turning integration and measure theory in the next.
@@ -106,8 +100,8 @@ setting of functions from the real numbers to the real numbers,
 which is familiar from any introductory calculus class.
 In <a class="reference internal" href="#normed-spaces"><span class="std std-numref">Section 10.2</span></a>, we then consider the notion of a derivative in
 a much broader setting.</p>
-<section id="elementary-differential-calculus">
-<span id="index-1"></span><span id="id2"></span><h2><span class="section-number">10.1. </span>Elementary Differential Calculus<a class="headerlink" href="#elementary-differential-calculus" title="Link to this heading">&#61633;</a></h2>
+<div class="section" id="elementary-differential-calculus">
+<span id="index-1"></span><span id="id2"></span><h2><span class="section-number">10.1. </span>Elementary Differential Calculus<a class="headerlink" href="#elementary-differential-calculus" title="Permalink to this headline">&#61633;</a></h2>
 <p>Let <code class="docutils literal notranslate"><span class="pre">f</span></code> be a function from the reals to the reals. There is a difference
 between talking about the derivative of <code class="docutils literal notranslate"><span class="pre">f</span></code> at a single point and
 talking about the derivative function.
@@ -180,11 +174,11 @@ seems even weirder.</p>
 <span class="kd">example</span> <span class="o">:</span> <span class="n">deriv</span> <span class="n">sin</span> <span class="n">&#960;</span> <span class="bp">=</span> <span class="bp">-</span><span class="mi">1</span> <span class="o">:=</span> <span class="kd">by</span> <span class="n">simp</span>
 </pre></div>
 </div>
-</section>
-<section id="differential-calculus-in-normed-spaces">
-<span id="normed-spaces"></span><span id="index-2"></span><h2><span class="section-number">10.2. </span>Differential Calculus in Normed Spaces<a class="headerlink" href="#differential-calculus-in-normed-spaces" title="Link to this heading">&#61633;</a></h2>
-<section id="id3">
-<h3><span class="section-number">10.2.1. </span>Normed spaces<a class="headerlink" href="#id3" title="Link to this heading">&#61633;</a></h3>
+</div>
+<div class="section" id="differential-calculus-in-normed-spaces">
+<span id="normed-spaces"></span><span id="index-2"></span><h2><span class="section-number">10.2. </span>Differential Calculus in Normed Spaces<a class="headerlink" href="#differential-calculus-in-normed-spaces" title="Permalink to this headline">&#61633;</a></h2>
+<div class="section" id="id3">
+<h3><span class="section-number">10.2.1. </span>Normed spaces<a class="headerlink" href="#id3" title="Permalink to this headline">&#61633;</a></h3>
 <p>Differentiation can be generalized beyond <code class="docutils literal notranslate"><span class="pre">&#8477;</span></code> using the notion of a
 <em>normed vector space</em>, which encapsulates both direction and distance.
 We start with the notion of a <em>normed group</em>, which as an additive commutative
@@ -247,9 +241,9 @@ complete as long as the field itself is complete.</p>
   <span class="n">FiniteDimensional.complete</span> <span class="bp">&#120156;</span> <span class="n">E</span>
 </pre></div>
 </div>
-</section>
-<section id="continuous-linear-maps">
-<h3><span class="section-number">10.2.2. </span>Continuous linear maps<a class="headerlink" href="#continuous-linear-maps" title="Link to this heading">&#61633;</a></h3>
+</div>
+<div class="section" id="continuous-linear-maps">
+<h3><span class="section-number">10.2.2. </span>Continuous linear maps<a class="headerlink" href="#continuous-linear-maps" title="Permalink to this headline">&#61633;</a></h3>
 <p>We now turn to the morphisms in the category of normed spaces, namely,
 continuous linear maps.
 In Mathlib, the type of <code class="docutils literal notranslate"><span class="pre">&#120156;</span></code>-linear continuous maps between normed spaces
@@ -298,7 +292,7 @@ into a normed space is pointwise
 bounded, then the norms of these linear maps are uniformly bounded.
 The main ingredient is Baire&#8217;s theorem
 <code class="docutils literal notranslate"><span class="pre">nonempty_interior_of_iUnion_of_closed</span></code>. (You proved a version of this in the topology chapter.)
-Minor ingredients include <code class="docutils literal notranslate"><span class="pre">continuous_linear_map.op_norm_le_of_shell</span></code>,
+Minor ingredients include <code class="docutils literal notranslate"><span class="pre">continuous_linear_map.opNorm_le_of_shell</span></code>,
 <code class="docutils literal notranslate"><span class="pre">interior_subset</span></code> and <code class="docutils literal notranslate"><span class="pre">interior_iInter_subset</span></code> and <code class="docutils literal notranslate"><span class="pre">is_closed_le</span></code>.</p>
 <div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">variable</span> <span class="o">{</span><span class="bp">&#120156;</span> <span class="o">:</span> <span class="kt">Type</span><span class="bp">*</span><span class="o">}</span> <span class="o">[</span><span class="n">NontriviallyNormedField</span> <span class="bp">&#120156;</span><span class="o">]</span> <span class="o">{</span><span class="n">E</span> <span class="o">:</span> <span class="kt">Type</span><span class="bp">*</span><span class="o">}</span> <span class="o">[</span><span class="n">NormedAddCommGroup</span> <span class="n">E</span><span class="o">]</span>
   <span class="o">[</span><span class="n">NormedSpace</span> <span class="bp">&#120156;</span> <span class="n">E</span><span class="o">]</span> <span class="o">{</span><span class="n">F</span> <span class="o">:</span> <span class="kt">Type</span><span class="bp">*</span><span class="o">}</span> <span class="o">[</span><span class="n">NormedAddCommGroup</span> <span class="n">F</span><span class="o">]</span> <span class="o">[</span><span class="n">NormedSpace</span> <span class="bp">&#120156;</span> <span class="n">F</span><span class="o">]</span>
@@ -324,14 +318,14 @@ Minor ingredients include <code class="docutils literal notranslate"><span class
   <span class="k">have</span> <span class="n">real_norm_le</span> <span class="o">:</span> <span class="bp">&#8704;</span> <span class="n">z</span> <span class="bp">&#8712;</span> <span class="n">ball</span> <span class="n">x</span> <span class="n">&#949;</span><span class="o">,</span> <span class="bp">&#8704;</span> <span class="o">(</span><span class="n">i</span> <span class="o">:</span> <span class="n">&#953;</span><span class="o">),</span> <span class="bp">&#8214;</span><span class="n">g</span> <span class="n">i</span> <span class="n">z</span><span class="bp">&#8214;</span> <span class="bp">&#8804;</span> <span class="n">m</span>
   <span class="gr">sorry</span>
   <span class="k">have</span> <span class="n">&#949;k_pos</span> <span class="o">:</span> <span class="mi">0</span> <span class="bp">&lt;</span> <span class="n">&#949;</span> <span class="bp">/</span> <span class="bp">&#8214;</span><span class="n">k</span><span class="bp">&#8214;</span> <span class="o">:=</span> <span class="gr">sorry</span>
-  <span class="n">refine&#39;</span> <span class="o">&#10216;(</span><span class="n">m</span> <span class="bp">+</span> <span class="n">m</span> <span class="o">:</span> <span class="n">&#8469;</span><span class="o">)</span> <span class="bp">/</span> <span class="o">(</span><span class="n">&#949;</span> <span class="bp">/</span> <span class="bp">&#8214;</span><span class="n">k</span><span class="bp">&#8214;</span><span class="o">),</span> <span class="k">fun</span> <span class="n">i</span> <span class="bp">&#8614;</span> <span class="n">ContinuousLinearMap.op_norm_le_of_shell</span> <span class="n">&#949;_pos</span> <span class="n">_</span> <span class="n">hk</span> <span class="n">_</span><span class="o">&#10217;</span>
+  <span class="n">refine&#39;</span> <span class="o">&#10216;(</span><span class="n">m</span> <span class="bp">+</span> <span class="n">m</span> <span class="o">:</span> <span class="n">&#8469;</span><span class="o">)</span> <span class="bp">/</span> <span class="o">(</span><span class="n">&#949;</span> <span class="bp">/</span> <span class="bp">&#8214;</span><span class="n">k</span><span class="bp">&#8214;</span><span class="o">),</span> <span class="k">fun</span> <span class="n">i</span> <span class="bp">&#8614;</span> <span class="n">ContinuousLinearMap.opNorm_le_of_shell</span> <span class="n">&#949;_pos</span> <span class="n">_</span> <span class="n">hk</span> <span class="n">_</span><span class="o">&#10217;</span>
   <span class="gr">sorry</span>
   <span class="gr">sorry</span>
 </pre></div>
 </div>
-</section>
-<section id="asymptotic-comparisons">
-<h3><span class="section-number">10.2.3. </span>Asymptotic comparisons<a class="headerlink" href="#asymptotic-comparisons" title="Link to this heading">&#61633;</a></h3>
+</div>
+<div class="section" id="asymptotic-comparisons">
+<h3><span class="section-number">10.2.3. </span>Asymptotic comparisons<a class="headerlink" href="#asymptotic-comparisons" title="Permalink to this headline">&#61633;</a></h3>
 <p>Defining differentiability also requires asymptotic comparisons.
 Mathlib has an extensive library covering the big O and little o relations,
 whose definitions are shown below.
@@ -357,9 +351,9 @@ Here we will only use little o to define differentiability.</p>
   <span class="n">Iff.rfl</span>
 </pre></div>
 </div>
-</section>
-<section id="differentiability">
-<h3><span class="section-number">10.2.4. </span>Differentiability<a class="headerlink" href="#differentiability" title="Link to this heading">&#61633;</a></h3>
+</div>
+<div class="section" id="differentiability">
+<h3><span class="section-number">10.2.4. </span>Differentiability<a class="headerlink" href="#differentiability" title="Permalink to this headline">&#61633;</a></h3>
 <p>We are now ready to discuss differentiable functions between normed spaces.
 In analogy the elementary one-dimensional,
 Mathlib defines a predicate <code class="docutils literal notranslate"><span class="pre">HasFDerivAt</span></code> and a function <code class="docutils literal notranslate"><span class="pre">fderiv</span></code>.
@@ -401,7 +395,7 @@ of the inverse function theorem and the statement of the implicit function
 theorem, both of which are in Mathlib.
 Over <code class="docutils literal notranslate"><span class="pre">&#8477;</span></code> or <code class="docutils literal notranslate"><span class="pre">&#8450;</span></code>, continuously differentiable
 functions are strictly differentiable.</p>
-<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">example</span> <span class="o">{</span><span class="bp">&#120130;</span> <span class="o">:</span> <span class="kt">Type</span><span class="bp">*</span><span class="o">}</span> <span class="o">[</span><span class="n">IsROrC</span> <span class="bp">&#120130;</span><span class="o">]</span> <span class="o">{</span><span class="n">E</span> <span class="o">:</span> <span class="kt">Type</span><span class="bp">*</span><span class="o">}</span> <span class="o">[</span><span class="n">NormedAddCommGroup</span> <span class="n">E</span><span class="o">]</span> <span class="o">[</span><span class="n">NormedSpace</span> <span class="bp">&#120130;</span> <span class="n">E</span><span class="o">]</span> <span class="o">{</span><span class="n">F</span> <span class="o">:</span> <span class="kt">Type</span><span class="bp">*</span><span class="o">}</span>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">example</span> <span class="o">{</span><span class="bp">&#120130;</span> <span class="o">:</span> <span class="kt">Type</span><span class="bp">*</span><span class="o">}</span> <span class="o">[</span><span class="n">RCLike</span> <span class="bp">&#120130;</span><span class="o">]</span> <span class="o">{</span><span class="n">E</span> <span class="o">:</span> <span class="kt">Type</span><span class="bp">*</span><span class="o">}</span> <span class="o">[</span><span class="n">NormedAddCommGroup</span> <span class="n">E</span><span class="o">]</span> <span class="o">[</span><span class="n">NormedSpace</span> <span class="bp">&#120130;</span> <span class="n">E</span><span class="o">]</span> <span class="o">{</span><span class="n">F</span> <span class="o">:</span> <span class="kt">Type</span><span class="bp">*</span><span class="o">}</span>
     <span class="o">[</span><span class="n">NormedAddCommGroup</span> <span class="n">F</span><span class="o">]</span> <span class="o">[</span><span class="n">NormedSpace</span> <span class="bp">&#120130;</span> <span class="n">F</span><span class="o">]</span> <span class="o">{</span><span class="n">f</span> <span class="o">:</span> <span class="n">E</span> <span class="bp">&#8594;</span> <span class="n">F</span><span class="o">}</span> <span class="o">{</span><span class="n">x</span> <span class="o">:</span> <span class="n">E</span><span class="o">}</span> <span class="o">{</span><span class="n">n</span> <span class="o">:</span> <span class="n">WithTop</span> <span class="n">&#8469;</span><span class="o">}</span>
     <span class="o">(</span><span class="n">hf</span> <span class="o">:</span> <span class="n">ContDiffAt</span> <span class="bp">&#120130;</span> <span class="n">n</span> <span class="n">f</span> <span class="n">x</span><span class="o">)</span> <span class="o">(</span><span class="n">hn</span> <span class="o">:</span> <span class="mi">1</span> <span class="bp">&#8804;</span> <span class="n">n</span><span class="o">)</span> <span class="o">:</span> <span class="n">HasStrictFDerivAt</span> <span class="n">f</span> <span class="o">(</span><span class="n">fderiv</span> <span class="bp">&#120130;</span> <span class="n">f</span> <span class="n">x</span><span class="o">)</span> <span class="n">x</span> <span class="o">:=</span>
   <span class="n">hf.hasStrictFDerivAt</span> <span class="n">hn</span>
@@ -442,9 +436,9 @@ For example, you may want to use one-sided derivatives in the
 one-dimensional setting. The means to do so are found in Mathlib in a more
 general context;
 see <code class="docutils literal notranslate"><span class="pre">HasFDerivWithinAt</span></code> or the even more general <code class="docutils literal notranslate"><span class="pre">HasFDerivAtFilter</span></code>.</p>
-</section>
-</section>
-</section>
+</div>
+</div>
+</div>
 
 
            </div>
